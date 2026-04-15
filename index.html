@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>猪人格测试</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: linear-gradient(135deg, #fff4f6 0%, #ffffff 45%, #fff7ed 100%);
+      color: #1f2937;
+    }
+    .container {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+    .card {
+      background: rgba(255,255,255,0.92);
+      border-radius: 28px;
+      box-shadow: 0 12px 35px rgba(0,0,0,0.08);
+      padding: 28px;
+      border: 1px solid rgba(255,255,255,0.7);
+      backdrop-filter: blur(10px);
+    }
+    .hero {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 24px;
+      align-items: center;
+    }
+    .pill-wrap {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+    .pill {
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: #ffe4e6;
+      color: #9f1239;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .hero-box {
+      min-height: 280px;
+      border-radius: 28px;
+      background: linear-gradient(135deg, #ffe4e6 0%, #fed7aa 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 24px;
+    }
+    h1 {
+      font-size: 44px;
+      line-height: 1.15;
+      margin: 12px 0 16px;
+    }
+    h2 { margin: 0; }
+    .muted { color: #6b7280; }
+    .btn-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 24px;
+    }
+    button {
+      border: none;
+      border-radius: 18px;
+      padding: 14px 22px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.18s ease;
+    }
+    .btn-primary {
+      background: #111827;
+      color: white;
+    }
+    .btn-primary:hover { transform: translateY(-1px); opacity: 0.95; }
+    .btn-secondary {
+      background: white;
+      color: #111827;
+      border: 1px solid #d1d5db;
+    }
+    .btn-secondary:hover { background: #f9fafb; }
+    .btn-disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .progress-wrap {
+      min-width: 180px;
+      text-align: right;
+    }
+    .progress {
+      width: 100%;
+      height: 10px;
+      border-radius: 999px;
+      background: #f3f4f6;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+    .progress-bar {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #fb7185, #f59e0b);
+      width: 0%;
+      transition: width 0.25s ease;
+    }
+    .question-box {
+      border-radius: 28px;
+      padding: 24px;
+      background: linear-gradient(135deg, #ffffff 0%, #fff1f2 100%);
+      border: 1px solid #ffe4e6;
+    }
+    .question-text {
+      font-size: 30px;
+      line-height: 1.45;
+      font-weight: 700;
+      margin-bottom: 22px;
+    }
+    .options {
+      display: grid;
+      gap: 12px;
+    }
+    .option {
+      width: 100%;
+      text-align: left;
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 20px;
+      padding: 16px 18px;
+      font-weight: 500;
+    }
+    .option:hover {
+      background: #fff7f7;
+      border-color: #fecdd3;
+    }
+    .option.active {
+      background: #fff1f2;
+      border-color: #fb7185;
+      box-shadow: 0 4px 16px rgba(251,113,133,0.12);
+    }
+    .result-card {
+      border-radius: 32px;
+      padding: 28px;
+      box-shadow: 0 12px 35px rgba(0,0,0,0.08);
+      background: linear-gradient(135deg, #fff1f2 0%, #ffedd5 100%);
+    }
+    .result-title {
+      font-size: 36px;
+      margin: 10px 0;
+      font-weight: 800;
+    }
+    .tag-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 18px 0;
+    }
+    .tag {
+      background: rgba(255,255,255,0.78);
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 18px;
+    }
+    .panel {
+      background: rgba(255,255,255,0.72);
+      border-radius: 20px;
+      padding: 18px;
+    }
+    .panel h3 { margin-top: 0; }
+    .score-block {
+      margin-top: 22px;
+      background: white;
+      border-radius: 24px;
+      padding: 22px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+    }
+    ul { margin: 0; padding-left: 18px; }
+    li { margin: 6px 0; }
+    .hidden { display: none; }
+
+    @media (max-width: 768px) {
+      .hero, .grid-2 { grid-template-columns: 1fr; }
+      h1 { font-size: 34px; }
+      .question-text { font-size: 24px; }
+      .topbar { flex-direction: column; align-items: flex-start; }
+      .progress-wrap { text-align: left; width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <section id="start-screen" class="card">
+      <div class="hero">
+        <div>
+          <div class="muted" style="letter-spacing: 0.2em; text-transform: uppercase; font-size: 13px;">Pig Personality Test</div>
+          <h1>你的本命猪，<br>到底是哪一只？</h1>
+          <p class="muted" style="font-size: 17px; line-height: 1.8;">
+            这是一套基于真实猪种外貌与行为特征延展出来的 24 题综合测试。
+            结果包含 13 个常规猪型和 1 个隐藏款「Big Bill 猪王」。
+          </p>
+          <div class="pill-wrap">
+            <span class="pill">24道题</span>
+            <span class="pill">14种结果</span>
+            <span class="pill">隐藏款机制</span>
+          </div>
+          <button class="btn-primary" style="margin-top: 24px;" onclick="startTest()">开始测试</button>
+        </div>
+        <div class="hero-box">
+          <div>
+            <div style="font-size: 72px;">🐷</div>
+            <div style="font-size: 18px; margin-top: 14px; color: #374151;">昆昆猪 / 绵羊猪 / 杜洛克 / 野猪 / 猪王…</div>
+            <div class="muted" style="margin-top: 8px;">做完才知道你是哪一种。</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="quiz-screen" class="card hidden">
+      <div class="topbar">
+        <div>
+          <div class="muted" id="question-count">第 1 / 24 题</div>
+          <h2 id="dimension-title">社交性</h2>
+        </div>
+        <div class="progress-wrap">
+          <div class="muted" id="progress-text">进度 0%</div>
+          <div class="progress"><div id="progress-bar" class="progress-bar"></div></div>
+        </div>
+      </div>
+
+      <div class="question-box">
+        <div id="question-text" class="question-text"></div>
+        <div id="options" class="options"></div>
+      </div>
+
+      <div class="btn-row">
+        <button id="prev-btn" class="btn-secondary" onclick="prevQuestion()">上一题</button>
+        <button id="next-btn" class="btn-primary btn-disabled" onclick="nextQuestion()">下一题</button>
+      </div>
+    </section>
+
+    <section id="result-screen" class="hidden">
+      <div id="result-card" class="result-card"></div>
+      <div class="score-block">
+        <h3 style="margin-top: 0;">这种类型的你</h3>
+        <div id="type-explanation" style="line-height: 1.9; color: #374151;"></div>
+        <div class="btn-row" style="justify-content: flex-start; margin-top: 20px;">
+          <button class="btn-secondary" onclick="resetTest()">重新测试</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const TYPES = {
+      kunekune: {
+        name: "昆昆猪",
+        emoji: "🐷",
+        subtitle: "社交治愈型",
+        tags: ["温和", "好相处", "情绪稳定"],
+        description: "你像昆昆猪一样圆润温和，擅长和人建立舒服的连接。你很少主动制造冲突，更愿意维持关系里的平衡感。",
+        strengths: ["共情力强", "容易让人放松", "适合团队协作"],
+        weaknesses: ["容易照顾别人太多", "边界感有时不够", "不喜欢正面冲突"],
+        interpretation: {
+          core: "你通常是让人觉得舒服的那一类人。你重视关系里的和谐感，也很擅长照顾别人的情绪，所以很多人会自然靠近你。",
+          relation: "在关系里你偏向陪伴型和修复型。你不喜欢冷战，也不喜欢硬碰硬，很多时候会主动当那个缓和气氛的人。",
+          growth: "你最需要练习的是边界感。温柔是优点，但不是无限让步。学会明确表达自己的需要，会让你更稳定。"
+        }
+      },
+      mangalitsa: {
+        name: "绵羊猪",
+        emoji: "🧶",
+        subtitle: "慢热稳定型",
+        tags: ["慢热", "抗压", "稳定"],
+        description: "你像卷毛厚实的绵羊猪，不一定反应最快，但非常稳。外界越乱，你越可能靠耐受力和持续性扛过去。",
+        strengths: ["稳定持久", "不容易崩", "适应逆境能力强"],
+        weaknesses: ["容易拖延", "不爱变化", "进入状态较慢"],
+        interpretation: {
+          core: "你不是爆发型选手，而是续航型选手。你进入状态可能慢一点，但一旦稳定下来，往往比别人更能长期坚持。",
+          relation: "在关系里你慢热、谨慎，不会很快完全敞开自己。但一旦你认定某个人，就会给出非常稳定的陪伴。",
+          growth: "你最需要注意的是别把“稳”变成“拖”。很多机会不是等准备好了才来，而是先开始才会越来越稳。"
+        }
+      },
+      jinhua: {
+        name: "金华两头乌",
+        emoji: "⚫⚪",
+        subtitle: "反差型人格",
+        tags: ["反差", "层次感", "观察型"],
+        description: "你像金华两头乌一样有很强的反差感。别人看到的是一面，真正熟悉你后才会发现你完全不是表面那样。",
+        strengths: ["层次丰富", "适应不同场景", "有神秘感"],
+        weaknesses: ["容易被误解", "状态波动明显", "有时不够直接"],
+        interpretation: {
+          core: "你身上有明显的反差感。你不是单一线条的人，而是带着层次和切换感，所以熟人看到的你和陌生人看到的你常常不同。",
+          relation: "在关系里你不算最直接的人。你会观察、会保留，也会因为不同对象展现不同面，所以很容易被人觉得“有点难懂”。",
+          growth: "你真正需要的不是变简单，而是变清晰。把你的真实需求更直接地表达出来，别人会更容易靠近你。"
+        }
+      },
+      mini: {
+        name: "日本宠物小香猪",
+        emoji: "🐾",
+        subtitle: "精致依赖型",
+        tags: ["精致", "需要关注", "情感导向"],
+        description: "你像被精心照料的小香猪，敏感、可爱，也很在意外界反馈。你通常不是没有主见，而是更希望被理解和被在意。",
+        strengths: ["感受力强", "会经营关系", "有亲和力"],
+        weaknesses: ["容易在意别人看法", "安全感需求高", "可能有点黏人"],
+        interpretation: {
+          core: "你是很重视情感反馈的人。你对氛围、态度和细节都比较敏感，所以外界有没有在意你，你通常感受得很快。",
+          relation: "在关系里你需要被回应、被看见。你不是单纯依赖别人，而是很在乎彼此之间有没有温度和确认。",
+          growth: "你最需要建立的是稳定的内核。别把全部安全感都放在别人身上，当你能先肯定自己，关系会更轻松。"
+        }
+      },
+      largeblack: {
+        name: "遮眼猪",
+        emoji: "👂",
+        subtitle: "回避防御型",
+        tags: ["内向", "谨慎", "需要安全感"],
+        description: "你像耳朵遮住眼睛的遮眼猪，有天然的自我保护机制。你不一定冷淡，只是需要先确认环境足够安全才会真正打开自己。",
+        strengths: ["观察细致", "自我保护意识强", "不轻易被卷入混乱"],
+        weaknesses: ["容易回避", "表达偏保守", "进入关系较慢"],
+        interpretation: {
+          core: "你天然有防御机制，不会轻易把自己摊开给别人看。你的谨慎并不是冷淡，而是先判断这个环境值不值得你投入。",
+          relation: "在关系里你需要空间，需要缓冲，需要不被逼迫。你不喜欢太快的靠近，更喜欢慢慢确认安全感。",
+          growth: "你最需要练习的是“适度表达”。不是每一次脆弱都会换来伤害，有时候让别人知道你的真实感受，反而会减少误解。"
+        }
+      },
+      hampshire: {
+        name: "白腰带猪",
+        emoji: "🎯",
+        subtitle: "边界清晰型",
+        tags: ["原则", "清晰", "有分寸"],
+        description: "你像白腰带猪一样，边界感非常明确。你知道自己接受什么、不接受什么，也通常不会为了迎合别人轻易改变标准。",
+        strengths: ["原则感强", "做事有标准", "关系里很清楚"],
+        weaknesses: ["有时显得强硬", "不够圆滑", "容错率较低"],
+        interpretation: {
+          core: "你是边界和原则感都很强的人。你知道自己接受什么、不接受什么，也通常不会为了迎合别人轻易改变标准。",
+          relation: "在关系里你很清楚分寸，也不喜欢模糊拉扯。对的人会觉得你很可靠，不合适的人会觉得你有点难接近。",
+          growth: "你要注意别把清晰变成僵硬。原则是好事，但偶尔留一点弹性，会让你和世界的摩擦少很多。"
+        }
+      },
+      wildboar: {
+        name: "野猪",
+        emoji: "🐗",
+        subtitle: "原始战斗型",
+        tags: ["独立", "强势", "行动果断"],
+        description: "你像野猪一样带着原始生命力。遇到侵犯、阻碍和束缚时，你的第一反应不是退，而是顶上去。",
+        strengths: ["行动快", "边界强", "敢扛事"],
+        weaknesses: ["攻击性偏强", "不爱妥协", "容易把关系推硬"],
+        interpretation: {
+          core: "你是非常有生命力和冲劲的一型。遇到问题时，你通常不是先退，而是先顶上去，所以你身上会有很明显的行动感和压迫感。",
+          relation: "在关系里你不喜欢被控制，也不喜欢被拿捏。你需要尊重和真实，如果有人踩线，你会非常快地做出反应。",
+          growth: "你需要练习的不是变弱，而是控制力量的使用方式。不是所有问题都需要硬顶，有时候收一点，反而更强。"
+        }
+      },
+      bahamas: {
+        name: "巴哈马猪（海盗猪）",
+        emoji: "🏝️",
+        subtitle: "享乐探索型",
+        tags: ["爱玩", "松弛", "体验优先"],
+        description: "你像会游泳的巴哈马猪，天生就有一种轻盈和玩心。你重视体验、自由和快乐，讨厌被过度控制。",
+        strengths: ["会享受生活", "适应新体验快", "带动气氛"],
+        weaknesses: ["可能缺少长期规划", "容易分心", "抗无聊需求高"],
+        interpretation: {
+          core: "你是典型的体验派。你很重视快乐、自由和新鲜感，不喜欢把人生过成单一的任务列表。",
+          relation: "在关系里你需要的是松弛和有趣。你不太适合过度控制型的人，你更适合能一起玩、一起探索、一起享受的人。",
+          growth: "你最需要加强的是持续性。会玩是天赋，但如果能再补一点长期规划，你会比现在更厉害。"
+        }
+      },
+      duroc: {
+        name: "杜洛克猪",
+        emoji: "🏋️",
+        subtitle: "自律行动型",
+        tags: ["执行力", "现实导向", "自我要求高"],
+        description: "你像肌肉比例很强的杜洛克猪，偏向目标、效率和落地。你不一定最会说，但通常最能把事情往前推。",
+        strengths: ["执行力强", "习惯规划", "重结果"],
+        weaknesses: ["可能太紧绷", "对自己和别人要求高", "不够松弛"],
+        interpretation: {
+          core: "你是目标导向很强的人。你对效率、结果和执行比较敏感，很多事情你不是不想，而是会直接去做。",
+          relation: "在关系里你看重靠谱和行动，不太吃空话那一套。你更容易尊重有能力、有分寸、说到做到的人。",
+          growth: "你最需要学会的是放松。你已经很会往前冲了，接下来要练的是别把自己一直绷在高压状态里。"
+        }
+      },
+      potbelly: {
+        name: "越南大肚猪",
+        emoji: "🎈",
+        subtitle: "享受生活型",
+        tags: ["吃货", "松弛", "舒适优先"],
+        description: "你像越南大肚猪一样，天生知道怎么让自己舒服。你不见得懒，只是很清楚人生不能只剩效率。",
+        strengths: ["会休息", "会享受", "情绪缓冲能力强"],
+        weaknesses: ["容易拖延", "容易放过自己", "动力不稳定"],
+        interpretation: {
+          core: "你很懂得照顾自己的感受，也知道什么叫真正的舒服。你不是没目标，而是不会为了效率把自己完全牺牲掉。",
+          relation: "在关系里你偏向温和、陪伴和舒适感。你喜欢没有压迫感的相处，也讨厌别人把关系搞得太累。",
+          growth: "你要小心的是别让“享受当下”变成“无限拖延”。适当给自己一点结构，你会过得更轻松，而不是更累。"
+        }
+      },
+      pietrain: {
+        name: "斑点猪",
+        emoji: "🎲",
+        subtitle: "随机自由型",
+        tags: ["多变", "随性", "不按套路"],
+        description: "你像花纹随机的斑点猪，不喜欢被一种标签概括。你的魅力往往就在于不可预测和不按常理出牌。",
+        strengths: ["灵活", "有新鲜感", "不容易被框住"],
+        weaknesses: ["稳定性不足", "计划执行弱", "容易让人摸不透"],
+        interpretation: {
+          core: "你不是固定路线的人。你的想法、状态和兴趣会不断变化，所以你很难被单一标签框住。",
+          relation: "在关系里你需要新鲜感和空间感。别人如果想完全预测你、定义你，你通常会本能地想逃。",
+          growth: "你最需要补的是稳定输出。你的变化和灵活本来是优势，但如果能再加一点持续性，就会非常有杀伤力。"
+        }
+      },
+      tibetan: {
+        name: "藏香猪",
+        emoji: "⛰️",
+        subtitle: "野外生存型",
+        tags: ["坚韧", "能吃苦", "独立"],
+        description: "你像高原上的藏香猪，环境越艰难，越能激发你的韧性。你不一定高调，但非常能扛。",
+        strengths: ["抗压强", "耐受力高", "关键时刻稳得住"],
+        weaknesses: ["容易默默硬扛", "不擅长求助", "偶尔太苦行"],
+        interpretation: {
+          core: "你身上有很强的生存韧性。很多别人觉得很苦、很难坚持的东西，你反而能默默扛下来。",
+          relation: "在关系里你不一定高调表达，但你很可靠。真正熟悉你的人会知道，你是关键时刻很能顶住的人。",
+          growth: "你要注意别总是一个人硬扛。坚韧是优点，但适当求助、适当放松，不会削弱你，反而会让你走得更远。"
+        }
+      },
+      iberian: {
+        name: "伊比利亚黑猪",
+        emoji: "🖤",
+        subtitle: "高级感野性型",
+        tags: ["克制", "品味", "高级感"],
+        description: "你像伊比利亚黑猪一样带着一种克制的高级感。你不追求吵闹的存在感，但会用审美、分寸和选择证明自己。",
+        strengths: ["有品味", "有选择性", "气质辨识度高"],
+        weaknesses: ["距离感偏强", "不够接地气", "容易显得挑剔"],
+        interpretation: {
+          core: "你是很有选择性的人。你对审美、节奏和人与事的质感都有自己的标准，不会随便凑合。",
+          relation: "在关系里你偏向克制型和高门槛型。不是你不需要人，而是你需要的是对的人，而不是随便的人。",
+          growth: "你最需要留意的是别把“标准”变成“距离感”。当你适度放下一点防备，会更容易建立真正深的连接。"
+        }
+      },
+      bigbill: {
+        name: "Big Bill 猪王",
+        emoji: "👑",
+        subtitle: "隐藏款 · 极端统治型",
+        tags: ["极端", "压场", "统治欲"],
+        description: "你不是普通猪。你是极端值本身。你追求强度、结果、控制力和存在感，天然就会把场子压住。",
+        strengths: ["强势", "目标感爆棚", "领导驱动强"],
+        weaknesses: ["压迫感重", "容易走极端", "很难真正放松"],
+        interpretation: {
+          core: "你是极端值人格。你对强度、掌控和结果有很强的执念，不太甘心只做普通版本的自己。",
+          relation: "在关系里你天然带一点压场感。别人会觉得你很强、很有存在感，但也可能会因为你的气场而不太敢靠近。",
+          growth: "你真正需要学的不是更强，而是收放。能控制自己的力量的人，才是真正的王。"
+        }
+      }
+    };
+
+    const QUESTIONS = [
+      {
+        id: 1,
+        dimension: "社交性",
+        text: "周末你更倾向于怎样度过？",
+        options: [
+          { text: "和朋友聚会，气氛越热闹越好", scores: { kunekune: 2, bahamas: 1 } },
+          { text: "一个人待着，安静恢复精力", scores: { largeblack: 2, mangalitsa: 1 } },
+          { text: "和固定熟人见面，最好别太多人", scores: { mini: 2, jinhua: 1 } },
+          { text: "临时决定，谁喊我我再看", scores: { pietrain: 2, bahamas: 1 } }
+        ]
+      },
+      {
+        id: 2,
+        dimension: "社交性",
+        text: "在人多的场合，你通常是什么状态？",
+        options: [
+          { text: "很自然地融入，甚至会主动带气氛", scores: { kunekune: 2, bahamas: 1 } },
+          { text: "待一会儿就会累，只想找机会离开", scores: { largeblack: 2, iberian: 1 } },
+          { text: "会黏着熟人，不太想单独应付陌生人", scores: { mini: 2, kunekune: 1 } },
+          { text: "先观察别人，再决定要不要进入", scores: { jinhua: 2, hampshire: 1 } }
+        ]
+      },
+      {
+        id: 3,
+        dimension: "社交性",
+        text: "朋友通常会怎么评价你？",
+        options: [
+          { text: "好相处，很少让人有压力", scores: { kunekune: 2, potbelly: 1 } },
+          { text: "有点距离感，不太好一下子接近", scores: { largeblack: 2, iberian: 1 } },
+          { text: "挺可爱的，但也挺需要被照顾", scores: { mini: 2, kunekune: 1 } },
+          { text: "很难用一个词定义，经常状态不一样", scores: { pietrain: 2, jinhua: 1 } }
+        ]
+      },
+      {
+        id: 4,
+        dimension: "社交性",
+        text: "你更喜欢哪种关系模式？",
+        options: [
+          { text: "一个圈子里大家都很熟的感觉", scores: { kunekune: 2, mini: 1 } },
+          { text: "有边界、各自舒服最重要", scores: { hampshire: 2, largeblack: 1 } },
+          { text: "最好自由一点，今天想玩就玩", scores: { bahamas: 2, pietrain: 1 } },
+          { text: "关系不需要多，但必须有质量", scores: { iberian: 2, jinhua: 1 } }
+        ]
+      },
+      {
+        id: 5,
+        dimension: "社交性",
+        text: "你会主动找人聊天吗？",
+        options: [
+          { text: "会，我本来就不怕开启话题", scores: { kunekune: 2, wildboar: 1 } },
+          { text: "一般不会，除非真的有必要", scores: { largeblack: 2, hampshire: 1 } },
+          { text: "只会找很熟的人", scores: { mini: 2, mangalitsa: 1 } },
+          { text: "看状态，有时特别会聊，有时完全不想说", scores: { jinhua: 2, pietrain: 1 } }
+        ]
+      },
+      {
+        id: 6,
+        dimension: "社交性",
+        text: "下面哪种情况最让你不舒服？",
+        options: [
+          { text: "被冷落、被排除在外", scores: { mini: 2, kunekune: 1 } },
+          { text: "一直被人打扰，没有自己的空间", scores: { largeblack: 2, iberian: 1 } },
+          { text: "气氛太僵，所有人都不说话", scores: { kunekune: 2, bahamas: 1 } },
+          { text: "太无聊、太没意思、没有新鲜感", scores: { bahamas: 2, pietrain: 1 } }
+        ]
+      },
+      {
+        id: 7,
+        dimension: "行动力",
+        text: "你对健身或身体管理的态度更像哪一种？",
+        options: [
+          { text: "有计划，会按目标训练或控制饮食", scores: { duroc: 2, hampshire: 1 } },
+          { text: "知道该做，但总想明天再开始", scores: { potbelly: 2, mangalitsa: 1 } },
+          { text: "偶尔来一下，能坚持多久看心情", scores: { jinhua: 2, pietrain: 1 } },
+          { text: "人生已经够累了，舒服最重要", scores: { bahamas: 2, potbelly: 1 } }
+        ]
+      },
+      {
+        id: 8,
+        dimension: "行动力",
+        text: "面对一个明确目标时，你通常会怎么做？",
+        options: [
+          { text: "拆解步骤，直接执行", scores: { duroc: 2, hampshire: 1 } },
+          { text: "会想很多，但迟迟不开始", scores: { pietrain: 2, largeblack: 1 } },
+          { text: "开始得快，后面靠情绪决定", scores: { jinhua: 2, wildboar: 1 } },
+          { text: "我不太喜欢被目标绑定", scores: { bahamas: 2, potbelly: 1 } }
+        ]
+      },
+      {
+        id: 9,
+        dimension: "行动力",
+        text: "你的作息更接近哪一种？",
+        options: [
+          { text: "比较规律，有自己的节奏", scores: { duroc: 2, mangalitsa: 1 } },
+          { text: "很混乱，但我也习惯了", scores: { pietrain: 2, bahamas: 1 } },
+          { text: "表面规律，实际上经常突然破功", scores: { jinhua: 2, mini: 1 } },
+          { text: "随意，舒服就行", scores: { potbelly: 2, bahamas: 1 } }
+        ]
+      },
+      {
+        id: 10,
+        dimension: "行动力",
+        text: "如果有一个截止日期很近的任务，你更可能：",
+        options: [
+          { text: "马上开工，不喜欢拖着", scores: { duroc: 2, wildboar: 1 } },
+          { text: "拖到最后一刻，靠临时爆发", scores: { potbelly: 2, jinhua: 1 } },
+          { text: "做一会儿停一会儿，思路跳来跳去", scores: { pietrain: 2, jinhua: 1 } },
+          { text: "先判断值不值得做，再决定投入多少", scores: { iberian: 2, hampshire: 1 } }
+        ]
+      },
+      {
+        id: 11,
+        dimension: "行动力",
+        text: "你对“努力”这件事的看法更像：",
+        options: [
+          { text: "该做就做，自律本来就是基本功", scores: { duroc: 2, hampshire: 1 } },
+          { text: "努力可以，但没必要把自己逼太狠", scores: { potbelly: 2, mangalitsa: 1 } },
+          { text: "有状态时会很拼，没状态就算了", scores: { jinhua: 2, pietrain: 1 } },
+          { text: "比起努力，我更在乎有没有意思", scores: { bahamas: 2, iberian: 1 } }
+        ]
+      },
+      {
+        id: 12,
+        dimension: "行动力",
+        text: "你花钱的方式更像哪一种？",
+        options: [
+          { text: "会预算，会规划，尽量花在有产出的地方", scores: { duroc: 2, iberian: 1 } },
+          { text: "先让自己开心，别的以后再说", scores: { potbelly: 2, bahamas: 1 } },
+          { text: "一阵理性一阵上头", scores: { jinhua: 2, pietrain: 1 } },
+          { text: "只买真正符合自己标准的东西", scores: { iberian: 2, hampshire: 1 } }
+        ]
+      },
+      {
+        id: 13,
+        dimension: "压力反应",
+        text: "压力来的时候，你第一反应通常是：",
+        options: [
+          { text: "先自己慢慢消化，不急着反应", scores: { mangalitsa: 2, largeblack: 1 } },
+          { text: "直接处理，越拖越烦", scores: { wildboar: 2, duroc: 1 } },
+          { text: "先让自己舒服一点再说", scores: { potbelly: 2, bahamas: 1 } },
+          { text: "找信任的人说一说", scores: { kunekune: 2, mini: 1 } }
+        ]
+      },
+      {
+        id: 14,
+        dimension: "压力反应",
+        text: "环境突然变差时，你更像哪一种状态？",
+        options: [
+          { text: "慢慢适应，我扛得住", scores: { mangalitsa: 2, tibetan: 1 } },
+          { text: "想办法立刻改变环境", scores: { wildboar: 2, duroc: 1 } },
+          { text: "忍一忍，先过了眼前再说", scores: { tibetan: 2, largeblack: 1 } },
+          { text: "直接摆烂，等心情好了再处理", scores: { potbelly: 2, bahamas: 1 } }
+        ]
+      },
+      {
+        id: 15,
+        dimension: "压力反应",
+        text: "当别人侵犯你边界时，你通常会：",
+        options: [
+          { text: "尽量缓和，但会委婉表达不舒服", scores: { kunekune: 2, jinhua: 1 } },
+          { text: "直接反击，不让对方得寸进尺", scores: { wildboar: 2, hampshire: 1 } },
+          { text: "先回避，不想正面冲突", scores: { largeblack: 2, mini: 1 } },
+          { text: "表面没事，心里记住以后再算", scores: { jinhua: 2, iberian: 1 } }
+        ]
+      },
+      {
+        id: 16,
+        dimension: "压力反应",
+        text: "面对长期困难，你更接近哪种方式？",
+        options: [
+          { text: "我会靠稳定和耐心慢慢熬过去", scores: { mangalitsa: 2, tibetan: 1 } },
+          { text: "我会主动换路，不会死磕无效的事", scores: { wildboar: 2, duroc: 1 } },
+          { text: "我能吃苦，但通常不太会说出来", scores: { tibetan: 2, largeblack: 1 } },
+          { text: "太久的苦我受不了，我会优先保命", scores: { potbelly: 2, bahamas: 1 } }
+        ]
+      },
+      {
+        id: 17,
+        dimension: "压力反应",
+        text: "情绪低落时，你更可能：",
+        options: [
+          { text: "自己消化，尽量不麻烦别人", scores: { mangalitsa: 2, tibetan: 1 } },
+          { text: "爆发一下，把情绪推出去", scores: { wildboar: 2, pietrain: 1 } },
+          { text: "找人陪、找人听我说", scores: { kunekune: 2, mini: 1 } },
+          { text: "吃点东西、刷点视频、先把情绪糊过去", scores: { potbelly: 2, bahamas: 1 } }
+        ]
+      },
+      {
+        id: 18,
+        dimension: "压力反应",
+        text: "如果必须在恶劣环境里待一段时间，你更像：",
+        options: [
+          { text: "会难受，但我能一点点适应", scores: { mangalitsa: 2, tibetan: 1 } },
+          { text: "我会想办法争资源，把局面扳回来", scores: { wildboar: 2, hampshire: 1 } },
+          { text: "只要有人陪，我会好很多", scores: { mini: 2, kunekune: 1 } },
+          { text: "如果没有舒服感，我会很快失去动力", scores: { potbelly: 2, bahamas: 1 } }
+        ]
+      },
+      {
+        id: 19,
+        dimension: "个性结构",
+        text: "别人对你的第一印象和熟了之后的印象，通常：",
+        options: [
+          { text: "差别不大，我比较表里一致", scores: { duroc: 2, hampshire: 1 } },
+          { text: "反差挺大，熟了之后完全不是一个感觉", scores: { jinhua: 2, mini: 1 } },
+          { text: "很难说，我自己状态也经常变", scores: { pietrain: 2, jinhua: 1 } },
+          { text: "第一印象通常就决定别人怎么看我了", scores: { iberian: 2, largeblack: 1 } }
+        ]
+      },
+      {
+        id: 20,
+        dimension: "个性结构",
+        text: "你对规则更接近哪种态度？",
+        options: [
+          { text: "规则有助于秩序，我一般会遵守", scores: { hampshire: 2, duroc: 1 } },
+          { text: "规则可以灵活点，别太死", scores: { jinhua: 2, kunekune: 1 } },
+          { text: "看心情和场景，不一定按套路来", scores: { pietrain: 2, bahamas: 1 } },
+          { text: "如果规则压我，我会直接顶回去", scores: { wildboar: 2, bigbill: 1 } }
+        ]
+      },
+      {
+        id: 21,
+        dimension: "个性结构",
+        text: "你更认同哪种生活审美？",
+        options: [
+          { text: "舒服、温暖、有人情味", scores: { kunekune: 2, potbelly: 1 } },
+          { text: "简单、厚实、稳稳的就好", scores: { mangalitsa: 2, tibetan: 1 } },
+          { text: "高级、克制、讲究质感", scores: { iberian: 2, hampshire: 1 } },
+          { text: "自由、好玩、有新鲜刺激", scores: { bahamas: 2, pietrain: 1 } }
+        ]
+      },
+      {
+        id: 22,
+        dimension: "个性结构",
+        text: "下面哪一句最像你的人生主张？",
+        options: [
+          { text: "快乐很重要，活着不能太拧巴", scores: { bahamas: 2, potbelly: 1 } },
+          { text: "能掌控自己的人生，比什么都重要", scores: { duroc: 2, hampshire: 1 } },
+          { text: "能扛过去的，最后都会变成底气", scores: { tibetan: 2, mangalitsa: 1 } },
+          { text: "我宁愿自由，也不想活得太听话", scores: { wildboar: 2, bigbill: 1 } }
+        ]
+      },
+      {
+        id: 23,
+        dimension: "个性结构",
+        text: "如果一定要选一个你最在意的东西，你会选：",
+        options: [
+          { text: "关系里的舒服和被理解", scores: { kunekune: 2, mini: 1 } },
+          { text: "成就、结果和上升空间", scores: { duroc: 2, bigbill: 1 } },
+          { text: "安全感和不被打扰", scores: { largeblack: 2, iberian: 1 } },
+          { text: "自由和自己想过的生活", scores: { wildboar: 2, bahamas: 1 } }
+        ]
+      },
+      {
+        id: 24,
+        dimension: "个性结构",
+        text: "下面哪句评价最容易让你暗爽？",
+        options: [
+          { text: "你这个人真的很好相处", scores: { kunekune: 2, mini: 1 } },
+          { text: "你看起来就很强，很能扛事", scores: { tibetan: 2, wildboar: 1 } },
+          { text: "你很厉害，而且很有控制力", scores: { duroc: 2, hampshire: 1, bigbill: 1 } },
+          { text: "你很特别，别人都不像你", scores: { iberian: 2, pietrain: 1, jinhua: 1 } }
+        ]
+      }
+    ];
+
+    let currentIndex = 0;
+    let answers = Array(QUESTIONS.length).fill(null);
+
+    const startScreen = document.getElementById("start-screen");
+    const quizScreen = document.getElementById("quiz-screen");
+    const resultScreen = document.getElementById("result-screen");
+    const questionCount = document.getElementById("question-count");
+    const dimensionTitle = document.getElementById("dimension-title");
+    const progressText = document.getElementById("progress-text");
+    const progressBar = document.getElementById("progress-bar");
+    const questionText = document.getElementById("question-text");
+    const optionsBox = document.getElementById("options");
+    const nextBtn = document.getElementById("next-btn");
+    const prevBtn = document.getElementById("prev-btn");
+    const resultCard = document.getElementById("result-card");
+    const typeExplanation = document.getElementById("type-explanation");
+
+    function startTest() {
+      startScreen.classList.add("hidden");
+      quizScreen.classList.remove("hidden");
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      const q = QUESTIONS[currentIndex];
+      questionCount.textContent = `第 ${currentIndex + 1} / ${QUESTIONS.length} 题`;
+      dimensionTitle.textContent = q.dimension;
+
+      const progress = Math.round((currentIndex / QUESTIONS.length) * 100);
+      progressText.textContent = `进度 ${progress}%`;
+      progressBar.style.width = progress + "%";
+
+      questionText.textContent = q.text;
+      prevBtn.disabled = currentIndex === 0;
+      prevBtn.classList.toggle("btn-disabled", currentIndex === 0);
+
+      optionsBox.innerHTML = "";
+
+      q.options.forEach((option, idx) => {
+        const btn = document.createElement("button");
+        btn.className = "option" + (answers[currentIndex] === idx ? " active" : "");
+        btn.innerHTML = `<strong>${String.fromCharCode(65 + idx)}.</strong> ${option.text}`;
+        btn.onclick = () => {
+          answers[currentIndex] = idx;
+          renderQuestion();
+        };
+        optionsBox.appendChild(btn);
+      });
+
+      const selected = answers[currentIndex] !== null;
+      nextBtn.disabled = !selected;
+      nextBtn.classList.toggle("btn-disabled", !selected);
+      nextBtn.textContent = currentIndex === QUESTIONS.length - 1 ? "查看结果" : "下一题";
+    }
+
+    function prevQuestion() {
+      if (currentIndex > 0) {
+        currentIndex -= 1;
+        renderQuestion();
+      }
+    }
+
+    function nextQuestion() {
+      if (answers[currentIndex] === null) return;
+
+      if (currentIndex === QUESTIONS.length - 1) {
+        showResult();
+      } else {
+        currentIndex += 1;
+        renderQuestion();
+      }
+    }
+
+    function sortTotals(totals) {
+      return Object.entries(totals)
+        .map(([key, value]) => ({ key, value }))
+        .sort((a, b) => b.value - a.value);
+    }
+
+    function calculateResult() {
+      const totals = {};
+      Object.keys(TYPES).forEach((key) => {
+        totals[key] = 0;
+      });
+
+      answers.forEach((answerIndex, qIndex) => {
+        const option = QUESTIONS[qIndex].options[answerIndex];
+        if (!option) return;
+
+        Object.entries(option.scores).forEach(([key, value]) => {
+          totals[key] += value;
+        });
+      });
+
+      const bigBillTriggered =
+        totals.duroc >= 6 &&
+        totals.wildboar >= 5 &&
+        totals.hampshire >= 4 &&
+        totals.bigbill >= 2;
+
+      if (bigBillTriggered) {
+        return { resultKey: "bigbill", totals, sorted: sortTotals(totals) };
+      }
+
+      const sorted = sortTotals(totals).filter((item) => item.key !== "bigbill");
+      return { resultKey: sorted[0].key, totals, sorted };
+    }
+
+    function showResult() {
+      quizScreen.classList.add("hidden");
+      resultScreen.classList.remove("hidden");
+      progressText.textContent = "进度 100%";
+      progressBar.style.width = "100%";
+
+      const { resultKey, sorted } = calculateResult();
+      const data = TYPES[resultKey];
+      const runnerUp = sorted.find((item) => item.key !== resultKey && item.key !== "bigbill");
+
+      resultCard.innerHTML = `
+        <div class="muted">测试结果</div>
+        <div class="result-title">${data.emoji} 你是：${data.name}</div>
+        <div style="font-size: 20px; color: #4b5563; font-weight: 600;">${data.subtitle}</div>
+        <p style="line-height: 1.9; margin-top: 16px; font-size: 16px;">${data.description}</p>
+        <div class="tag-wrap">
+          ${data.tags.map(tag => `<span class="tag">${tag}</span>`).join("")}
+        </div>
+        <div class="grid-2">
+          <div class="panel">
+            <h3>你的优点</h3>
+            <ul>${data.strengths.map(item => `<li>${item}</li>`).join("")}</ul>
+          </div>
+          <div class="panel">
+            <h3>容易卡住的地方</h3>
+            <ul>${data.weaknesses.map(item => `<li>${item}</li>`).join("")}</ul>
+          </div>
+        </div>
+        ${runnerUp ? `<div class="panel" style="margin-top: 16px;"><strong>你的副型倾向：</strong> ${TYPES[runnerUp.key].name} ${TYPES[runnerUp.key].emoji}</div>` : ""}
+      `;
+
+      typeExplanation.innerHTML = `
+        <p><strong>核心气质：</strong>${data.interpretation.core}</p>
+        <p><strong>关系模式：</strong>${data.interpretation.relation}</p>
+        <p><strong>成长建议：</strong>${data.interpretation.growth}</p>
+      `;
+    }
+
+    function resetTest() {
+      currentIndex = 0;
+      answers = Array(QUESTIONS.length).fill(null);
+      resultScreen.classList.add("hidden");
+      quizScreen.classList.add("hidden");
+      startScreen.classList.remove("hidden");
+    }
+  </script>
+</body>
+</html>
