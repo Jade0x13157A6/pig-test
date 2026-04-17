@@ -70,6 +70,7 @@
       margin: 12px 0 16px;
     }
 
+    h2 { margin: 0; }
     .muted { color: #6b7280; }
 
     .btn-row {
@@ -388,15 +389,16 @@
 
           <div class="pill-wrap">
             <span class="pill">24道题</span>
+            <span class="pill">14种猪猪结果</span>
           </div>
 
           <button class="btn-primary" style="margin-top: 24px;" onclick="startTest()">开始测试</button>
         </div>
 
         <div class="hero-box">
-          <div>
-            <div style="font-size: 72px;">🐷</div>
-          </div>
+          <img src="./img/page.png" alt="封面图"
+            style="width:100%; height:100%; max-height:260px; object-fit:cover; border-radius:20px;">
+        </div>
         </div>
       </div>
     </section>
@@ -406,7 +408,8 @@
 
       <div class="topbar">
         <div>
-          <div class="muted" id="question-count">Q1 / 24</div>
+          <div class="muted" id="question-count">第 1 / 24 题</div>
+          <h2 id="dimension-title">社交性</h2>
         </div>
         <div class="progress-wrap">
           <div class="muted" id="progress-text">进度 0%</div>
@@ -943,6 +946,7 @@
     const quizScreen = document.getElementById("quiz-screen");
     const resultScreen = document.getElementById("result-screen");
     const questionCount = document.getElementById("question-count");
+    const dimensionTitle = document.getElementById("dimension-title");
     const progressText = document.getElementById("progress-text");
     const progressBar = document.getElementById("progress-bar");
     const questionText = document.getElementById("question-text");
@@ -982,7 +986,8 @@
 
     function renderQuestion() {
       const q = QUESTIONS[currentIndex];
-      questionCount.textContent = `Q${currentIndex + 1} / ${QUESTIONS.length}`;
+      questionCount.textContent = `第 ${currentIndex + 1} / ${QUESTIONS.length} 题`;
+      dimensionTitle.textContent = q.dimension;
 
       const progress = Math.round((currentIndex / QUESTIONS.length) * 100);
       progressText.textContent = `进度 ${progress}%`;
